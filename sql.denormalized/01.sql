@@ -2,11 +2,10 @@
 * Count the number of tweets that use #coronavirus
 */
 
-SELECT COUNT(DISTINCT data->>'id') AS count
+SELECT COUNT(*)
 FROM tweets_jsonb
-WHERE
-  (
-    COALESCE(data->'entities'->'hashtags','[]') ||
-    COALESCE(data->'extended_tweet'->'entities'->'hashtags','[]')
-  ) @> '[{"text":"coronavirus"}]';
+WHERE (
+  COALESCE(data->'entities'->'hashtags', '[]'::jsonb) ||
+  COALESCE(data->'extended_tweet'->'entities'->'hashtags', '[]'::jsonb)
+) @> '[{"text":"coronavirus"}]';
 
