@@ -7,9 +7,10 @@ FROM (
   SELECT 1
   FROM tweets_jsonb
   WHERE
-    to_tsvector('english',
-      COALESCE((data -> 'extended_tweet' ->> 'full_text'), (data ->> 'text'))
-    ) @@ to_tsquery('english','coronavirus')
+    to_tsvector(
+      'english',
+      COALESCE(data->'extended_tweet'->>'full_text', data->>'text')
+    ) @@ to_tsquery('english', 'coronavirus')
     AND data->>'lang' = 'en'
   LIMIT 10000
 ) AS sub;
